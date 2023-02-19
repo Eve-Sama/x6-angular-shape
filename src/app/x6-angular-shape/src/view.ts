@@ -1,7 +1,7 @@
 import { EmbeddedViewRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Dom, NodeView } from '@antv/x6';
 import { AngularShape } from './node';
-import { shapeMaps } from './registry';
+import { registerInfo } from './registry';
 
 export class AngularShapeView extends NodeView<AngularShape> {
   getNodeContainer(): HTMLDivElement {
@@ -10,9 +10,7 @@ export class AngularShapeView extends NodeView<AngularShape> {
 
   override confirmUpdate(flag: number): number {
     const ret = super.confirmUpdate(flag);
-    return this.handleAction(ret, AngularShapeView.action, () => {
-      this.renderAngularContent();
-    });
+    return this.handleAction(ret, AngularShapeView.action, () => this.renderAngularContent());
   }
 
   private getNgInput(): Record<string, any> {
@@ -26,7 +24,7 @@ export class AngularShapeView extends NodeView<AngularShape> {
     const container = this.getNodeContainer();
     if (container) {
       const node = this.cell;
-      const { injector, content } = shapeMaps[node.shape];
+      const { injector, content } = registerInfo.get(node.shape)!;
       const viewContainerRef = injector.get(ViewContainerRef);
       if (content instanceof TemplateRef) {
         const ngInput = this.getNgInput();

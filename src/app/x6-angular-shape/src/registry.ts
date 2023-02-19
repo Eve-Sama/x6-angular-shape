@@ -9,23 +9,17 @@ export type AngularShapeConfig = Node.Properties & {
   content: Content;
 };
 
-export const shapeMaps: Record<
+export const registerInfo: Map<
   string,
   {
     injector: Injector;
     content: Content;
   }
-> = {};
+> = new Map();
 
 export function register(config: AngularShapeConfig) {
   const { shape, injector, content, ...others } = config;
-  if (!shape) {
-    throw new Error('should specify shape in config');
-  }
-  shapeMaps[shape] = {
-    injector,
-    content,
-  };
+  registerInfo.set(shape, { injector, content });
 
   Graph.registerNode(
     shape,
