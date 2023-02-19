@@ -30,11 +30,9 @@ export class AngularShapeView extends NodeView<AngularShape> {
         const embeddedViewRef = viewContainerRef.createEmbeddedView(content, { ngInput });
         embeddedViewRef.rootNodes.forEach(node => container.appendChild(node));
         embeddedViewRef.detectChanges();
-        console.log(embeddedViewRef, `embeddedViewRef`);
-        // todo: Template的值如何更新?
+        // Todo: Template的值如何更新?
       } else {
         const componentRef = viewContainerRef.createComponent(content);
-        console.log(componentRef, `componentRef`);
         const insertNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
         container.appendChild(insertNode);
         // 将用户传入的 ngInput 依次赋值到 component 的属性当中
