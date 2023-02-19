@@ -41,7 +41,7 @@ export class AppComponent implements AfterViewInit {
       y: 100,
       data: {
         // Input 的参数必须放在这里
-        ngInput: {
+        ngArguments: {
           value: '糟糕糟糕 Oh my god',
         },
       },
@@ -54,7 +54,7 @@ export class AppComponent implements AfterViewInit {
 ### TemplateRef 渲染
 
 ```html
-<ng-template #template let-data="ngInput">
+<ng-template #template let-data="ngArguments">
   <section class="template-container">
     <span class="value">{{ data.value }}</span>
   </section>
@@ -86,7 +86,7 @@ export class AppComponent implements AfterViewInit {
       x: 100,
       y: 100,
       data: {
-        ngInput: {
+        ngArguments: {
           value: '魔法怎么失灵啦',
         },
       },

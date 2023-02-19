@@ -13,20 +13,20 @@ export class AngularShapeView extends NodeView<AngularShape> {
     return this.handleAction(ret, AngularShapeView.action, () => this.renderAngularContent());
   }
 
-  private getNgInput(): Record<string, any> {
-    const input = (this.cell.data?.ngInput as Record<string, any>) || {};
+  private getNgArguments(): Record<string, any> {
+    const input = (this.cell.data?.ngArguments as Record<string, any>) || {};
     return input;
   }
 
   /** 当执行 node.setData() 时需要对实例设置新的输入值 */
   private setInstanceInput(content: Content, ref: EmbeddedViewRef<any> | ComponentRef<any>): void {
-    const ngInput = this.getNgInput();
+    const ngArguments = this.getNgArguments();
     if (content instanceof TemplateRef) {
       const embeddedViewRef = ref as EmbeddedViewRef<any>;
-      embeddedViewRef.context = { ngInput };
+      embeddedViewRef.context = { ngArguments };
     } else {
       const componentRef = ref as ComponentRef<any>;
-      Object.keys(ngInput).forEach(v => componentRef.setInput(v, ngInput[v]));
+      Object.keys(ngArguments).forEach(v => componentRef.setInput(v, ngArguments[v]));
       componentRef.changeDetectorRef.detectChanges();
     }
   }
@@ -39,8 +39,8 @@ export class AngularShapeView extends NodeView<AngularShape> {
       const { injector, content } = registerInfo.get(node.shape)!;
       const viewContainerRef = injector.get(ViewContainerRef);
       if (content instanceof TemplateRef) {
-        const ngInput = this.getNgInput();
-        const embeddedViewRef = viewContainerRef.createEmbeddedView(content, { ngInput });
+        const ngArguments = this.getNgArguments();
+        const embeddedViewRef = viewContainerRef.createEmbeddedView(content, { ngArguments });
         embeddedViewRef.rootNodes.forEach(node => container.appendChild(node));
         embeddedViewRef.detectChanges();
         node.on('change:data', () => this.setInstanceInput(content, embeddedViewRef));

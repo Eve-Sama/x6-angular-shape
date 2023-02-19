@@ -31,7 +31,7 @@ export class AppComponent implements AfterViewInit {
       x: randomX,
       y: randomY,
       data: {
-        ngInput: {
+        ngArguments: {
           value: `${this.idCount}`,
         },
       },
@@ -51,7 +51,7 @@ export class AppComponent implements AfterViewInit {
       x: randomX,
       y: randomY,
       data: {
-        ngInput: {
+        ngArguments: {
           value: `${this.idCount}`,
         },
       },
@@ -102,7 +102,7 @@ export class AppComponent implements AfterViewInit {
       return;
     }
     node.setData({
-      ngInput: {
+      ngArguments: {
         value: text,
       },
     });
