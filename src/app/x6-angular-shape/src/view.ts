@@ -1,7 +1,7 @@
-import { EmbeddedViewRef, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ComponentRef, EmbeddedViewRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Dom, NodeView } from '@antv/x6';
 import { AngularShape } from './node';
-import { registerInfo } from './registry';
+import { Content, registerInfo } from './registry';
 
 export class AngularShapeView extends NodeView<AngularShape> {
   getNodeContainer(): HTMLDivElement {
@@ -18,6 +18,19 @@ export class AngularShapeView extends NodeView<AngularShape> {
     return input;
   }
 
+  /** 当执行 node.setData() 时需要对实例设置新的输入值 */
+  private setInstanceInput(content: Content, ref: EmbeddedViewRef<any> | ComponentRef<any>): void {
+    const ngInput = this.getNgInput();
+    if (content instanceof TemplateRef) {
+      const embeddedViewRef = ref as EmbeddedViewRef<any>;
+      embeddedViewRef.context = { ngInput };
+    } else {
+      const componentRef = ref as ComponentRef<any>;
+      Object.keys(ngInput).forEach(v => componentRef.setInput(v, ngInput[v]));
+      componentRef.changeDetectorRef.detectChanges();
+    }
+  }
+
   protected renderAngularContent(): void {
     this.unmountAngularContent();
     const container = this.getNodeContainer();
@@ -30,19 +43,13 @@ export class AngularShapeView extends NodeView<AngularShape> {
         const embeddedViewRef = viewContainerRef.createEmbeddedView(content, { ngInput });
         embeddedViewRef.rootNodes.forEach(node => container.appendChild(node));
         embeddedViewRef.detectChanges();
-        // Todo: Template的值如何更新?
+        node.on('change:data', () => this.setInstanceInput(content, embeddedViewRef));
       } else {
         const componentRef = viewContainerRef.createComponent(content);
         const insertNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
         container.appendChild(insertNode);
-        // 将用户传入的 ngInput 依次赋值到 component 的属性当中
-        const renderComponentInstance = () => {
-          const ngInput = this.getNgInput();
-          Object.keys(ngInput).forEach(v => (componentRef.setInput(v, ngInput[v])));
-          componentRef.changeDetectorRef.detectChanges();
-        };
-        renderComponentInstance();
-        node.on('change:data', () => renderComponentInstance());
+        this.setInstanceInput(content, componentRef)
+        node.on('change:data', () => this.setInstanceInput(content, componentRef));
       }
     }
   }

@@ -1,7 +1,7 @@
 import { Injector, TemplateRef, Type } from '@angular/core';
 import { Graph, Node } from '@antv/x6';
 
-type Content = TemplateRef<any> | Type<any>;
+export type Content = TemplateRef<any> | Type<any>;
 
 export type AngularShapeConfig = Node.Properties & {
   shape: string;
