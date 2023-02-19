@@ -32,6 +32,16 @@ export class AppComponent implements AfterViewInit {
     console.log(this.graph.getNodes());
   }
 
+  doRegister(): void {
+    register({
+      shape: 'custom-angular-node',
+      width: 160,
+      height: 80,
+      content: NodeComponent,
+      injector: this.injector,
+    });
+  }
+
   constructor(private injector: Injector) {}
 
   ngAfterViewInit(): void {
@@ -42,14 +52,6 @@ export class AppComponent implements AfterViewInit {
       background: {
         color: '#F2F7FA',
       },
-    });
-    // 注册一个 Angular 组件
-    register({
-      shape: 'custom-angular-node',
-      width: 160,
-      height: 80,
-      content: NodeComponent,
-      injector: this.injector,
     });
     // Shape.HTML.register({
     //   shape: 'custom-html',

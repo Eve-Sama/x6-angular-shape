@@ -32,6 +32,7 @@ export function register(config: AngularShapeConfig) {
     {
       injector,
       content,
+      inherit: 'angular-shape',
       ...others,
     },
     true,
