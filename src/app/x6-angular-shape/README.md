@@ -6,7 +6,6 @@
 
 ### Component 渲染
 
-首先需要准备一个自定义的 Component
 ```ts
 @Component({
   selector: 'app-node',
@@ -37,13 +36,58 @@ export class AppComponent implements AfterViewInit {
     });
 
     this.graph.addNode({
-      shape: 'custom-angular-template-node',
-      x: randomX,
-      y: randomY,
+      shape: 'custom-angular-component-node',
+      x: 100,
+      y: 100,
       data: {
-        // 所有
+        // Input 的参数必须放在这里
         ngInput: {
-          value: `${this.idCount}`,
+          value: '糟糕糟糕 Oh my god',
+        },
+      },
+    });
+  }
+}
+
+```
+
+### TemplateRef 渲染
+
+```html
+<ng-template #template let-data="ngInput">
+  <section class="template-container">
+    <span class="value">{{ data.value }}</span>
+  </section>
+</ng-template>
+```
+
+```ts
+import { register } from "@antv/x6-angular-shape";
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+})
+export class AppComponent implements AfterViewInit {
+  @ViewChild('template') template: TemplateRef<{}>;
+
+  ngAfterViewInit(): void {
+    register({
+      shape: 'custom-angular-template-node',
+      width: 120,
+      height: 20,
+      content: this.template,
+      injector: this.injector,
+    });
+
+    this.graph.addNode({
+      shape: 'custom-angular-template-node',
+      x: 100,
+      y: 100,
+      data: {
+        ngInput: {
+          value: '魔法怎么失灵啦',
         },
       },
     });
