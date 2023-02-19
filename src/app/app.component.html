@@ -25,11 +25,14 @@
         <input type="text" #text placeholder="替换的新内容">
         <br>
         <button type="button" (click)="updateComponentValue(id.value, text.value)">更新组件Input值</button>
-        <!-- <button (click)="addAngularComponent()">Add angular component</button>
-        <button (click)="addAngularTemplate()">Add angular template</button>
-        <button (click)="addAngularWithCallback()">使用回调函数渲染</button> -->
       </td>
     </tr>
   </table>
 </section>
 <div id="container" #container></div>
+
+<ng-template #template let-data="ngInput">
+  <section class="template-container">
+    template: <span class="value">{{ data.value }}</span>
+  </section>
+</ng-template>

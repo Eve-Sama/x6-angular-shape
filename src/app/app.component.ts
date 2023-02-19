@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
 import { Graph, Shape } from '@antv/x6';
 import { random } from 'lodash-es';
 import { NodeComponent } from './node-component/node.component';
@@ -16,6 +16,7 @@ export class AppComponent implements AfterViewInit {
   private idCount = 0;
 
   @ViewChild('container') container: ElementRef;
+  @ViewChild('template') template: TemplateRef<{}>;
 
   addComponent(): void {
     if (!this.hasRegisterComponent) {
@@ -38,7 +39,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   addTemplate(): void {
-    if (!this.hasRegisterComponent) {
+    if (!this.hasRegisterTemplate) {
       alert('请先注册 Angular Template!');
       return;
     }
@@ -79,9 +80,9 @@ export class AppComponent implements AfterViewInit {
     }
     register({
       shape: 'custom-angular-template-node',
-      width: 80,
+      width: 120,
       height: 20,
-      content: NodeComponent,
+      content: this.template,
       injector: this.injector,
     });
     this.hasRegisterTemplate = true;
@@ -105,7 +106,6 @@ export class AppComponent implements AfterViewInit {
         value: text,
       },
     });
-    console.log(node);
   }
 
   constructor(private injector: Injector) {}
