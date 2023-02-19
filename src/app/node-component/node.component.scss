@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid red;
+  height: 100%;
+  width: 100%;
+  transition: all ease 0.5s;
+  transform: scale(2);
+
+  &.transition {
+    border-color: #000;
+    transform: scale(1);
+  }
+  .value {
+    color: gray;
+  }
+}
