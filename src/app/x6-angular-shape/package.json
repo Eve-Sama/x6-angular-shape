@@ -39,7 +39,7 @@
   },
   "peerDependencies": {
     "@antv/x6": "^2.x",
-    "@angular/core": "^15.0.0"
+    "@angular/core": ">= 14"
   },
   "author": {
     "name": "Eve-Sama",
