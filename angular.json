@@ -30,7 +30,19 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "lodash/isPlainObject",
+              "lodash/isArray",
+              "lodash/isNumber",
+              "lodash/isTypedArray",
+              "regl",
+              "@babel/runtime/regenerator",
+              "@antv/matrix-util/lib/ext",
+              "@antv/algorithm/lib/asyncIndex",
+              "color",
+              "insert-css"
+            ]
           },
           "configurations": {
             "production": {
