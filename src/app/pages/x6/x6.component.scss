@@ -1,0 +1,29 @@
+.header {
+  table {
+    border: 1px solid #000;
+    td,
+    th {
+      padding: 8px;
+      border: 1px solid #000;
+      button {
+        margin-right: 4px;
+        &:last-of-type {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+
+.template-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #000;
+  height: 100%;
+  width: 100%;
+
+  .value {
+    color: gray;
+  }
+}
