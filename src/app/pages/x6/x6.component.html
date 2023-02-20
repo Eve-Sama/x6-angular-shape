@@ -5,13 +5,6 @@
       <th>操作</th>
     </tr>
     <tr>
-      <td>初始化注册</td>
-      <td>
-        <button type="button" (click)="doRegisterComponent()">注册Angular Component</button>
-        <button type="button" (click)="doRegisterTemplate()">注册Angular Template</button>
-      </td>
-    </tr>
-    <tr>
       <td>添加节点</td>
       <td>
         <button type="button" (click)="addComponent()">添加Angular Component</button>
@@ -25,6 +18,14 @@
         <input type="text" #text placeholder="替换的新内容">
         <br>
         <button type="button" (click)="updateComponentValue(id.value, text.value)">更新组件Input值</button>
+      </td>
+    </tr>
+    <tr>
+      <td>性能测试</td>
+      <td>
+        <button type="button" (click)="addBatchComponent(10)">添加10个组件</button>
+        <button type="button" (click)="addBatchComponent(30)">添加30个组件</button>
+        <button type="button" (click)="addBatchComponent(50)">添加50个组件</button>
       </td>
     </tr>
   </table>

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { Graph } from '@antv/x6';
+import { Graph, Node } from '@antv/x6';
 import { random } from 'lodash-es';
 import { NodeComponent } from '../../node-component/node.component';
 import { register } from '../../x6-angular-shape/src';
@@ -19,29 +19,30 @@ export class X6Component implements AfterViewInit {
   @ViewChild('template') template: TemplateRef<{}>;
 
   addComponent(): void {
-    if (!this.hasRegisterComponent) {
-      alert('请先注册 Angular Component!');
-      return;
-    }
-    const randomX = random(0, 1000);
-    const randomY = random(0, 600);
+    this.doRegisterComponent();
+    const config = this.getBaiscNode();
     this.graph.addNode({
-      id: `${++this.idCount}`,
+      ...config,
       shape: 'custom-angular-component-node',
-      x: randomX,
-      y: randomY,
-      data: {
-        ngArguments: {
-          value: `${this.idCount}`,
-        },
-      },
     });
+  }
+
+  addBatchComponent(count: number): void {
+    this.doRegisterComponent();
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
+    this.graph.addNodes(configList);
   }
 
   addTemplate(): void {
     if (!this.hasRegisterTemplate) {
-      alert('请先注册 Angular Template!');
-      return;
+      register({
+        shape: 'custom-angular-template-node',
+        width: 120,
+        height: 20,
+        content: this.template,
+        injector: this.injector,
+      });
+      this.hasRegisterTemplate = true;
     }
     const randomX = random(0, 1000);
     const randomY = random(0, 600);
@@ -56,36 +57,6 @@ export class X6Component implements AfterViewInit {
         },
       },
     });
-  }
-
-  doRegisterComponent(): void {
-    if (this.hasRegisterComponent) {
-      alert('请勿重复注册 Angular Component!');
-      return;
-    }
-    register({
-      shape: 'custom-angular-component-node',
-      width: 120,
-      height: 20,
-      content: NodeComponent,
-      injector: this.injector,
-    });
-    this.hasRegisterComponent = true;
-  }
-
-  doRegisterTemplate(): void {
-    if (this.hasRegisterTemplate) {
-      alert('请勿重复注册!');
-      return;
-    }
-    register({
-      shape: 'custom-angular-template-node',
-      width: 120,
-      height: 20,
-      content: this.template,
-      injector: this.injector,
-    });
-    this.hasRegisterTemplate = true;
   }
 
   updateComponentValue(id: string, text: string): void {
@@ -106,6 +77,36 @@ export class X6Component implements AfterViewInit {
         value: text,
       },
     });
+  }
+
+  private getBaiscNode(): Node.Metadata {
+    const randomX = random(0, 1000);
+    const randomY = random(0, 600);
+    const config: Node.Metadata = {
+      id: `${++this.idCount}`,
+      shape: 'custom-angular-component-node',
+      x: randomX,
+      y: randomY,
+      data: {
+        ngArguments: {
+          value: `${this.idCount}`,
+        },
+      },
+    };
+    return config;
+  }
+
+  private doRegisterComponent(): void {
+    if (!this.hasRegisterComponent) {
+      register({
+        shape: 'custom-angular-component-node',
+        width: 120,
+        height: 20,
+        content: NodeComponent,
+        injector: this.injector,
+      });
+      this.hasRegisterComponent = true;
+    }
   }
 
   constructor(private injector: Injector) {}
