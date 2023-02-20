@@ -79,6 +79,10 @@
             "browserTarget": "x6-angular-shape:build"
           }
         },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
