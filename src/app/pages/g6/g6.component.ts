@@ -17,16 +17,33 @@ export class G6Component implements AfterViewInit {
   @ViewChild('container') container: ElementRef;
 
   addNode(): void {
-    const randomX = random(0, 1000);
-    const randomY = random(0, 600);
-    (this.data.nodes as NodeConfig[]).push({
-      id: `${++this.idCount}`,
-      x: randomX,
-      y: randomY,
-      label: `${this.idCount}`,
-    })
+    const config = this.getBaiscNode();
+    (this.data.nodes as NodeConfig[]).push(config)
+    this.render();
+  }
+
+  addBatchComponent(count: number): void {
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
+    (this.data.nodes as NodeConfig[]).push(...configList)
+    this.render();
+  }
+
+  /** 设置 G6 的数据并且渲染 */
+  private render(): void {
     this.graph.data(this.data);
     this.graph.render();
+  }
+
+  private getBaiscNode(): NodeConfig {
+    const randomX = random(0, 1000);
+    const randomY = random(0, 600);
+    const config: NodeConfig = {
+      id: `${++this.idCount}`,
+      label: `${this.idCount}`,
+      x: randomX,
+      y: randomY,
+    };
+    return config;
   }
 
   constructor(private injector: Injector) {}
