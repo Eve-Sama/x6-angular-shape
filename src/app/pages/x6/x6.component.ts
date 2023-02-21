@@ -10,8 +10,6 @@ import { register } from '../../x6-angular-shape/src';
   styleUrls: ['./x6.component.scss'],
 })
 export class X6Component implements AfterViewInit {
-  private hasRegisterComponent = false;
-  private hasRegisterTemplate = false;
   private graph: Graph;
   private idCount = 0;
 
@@ -19,7 +17,6 @@ export class X6Component implements AfterViewInit {
   @ViewChild('template') template: TemplateRef<{}>;
 
   addComponent(): void {
-    this.doRegisterComponent();
     const config = this.getBaiscNode();
     this.graph.addNode({
       ...config,
@@ -27,23 +24,7 @@ export class X6Component implements AfterViewInit {
     });
   }
 
-  addBatchComponent(count: number): void {
-    this.doRegisterComponent();
-    const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
-    this.graph.addNodes(configList);
-  }
-
   addTemplate(): void {
-    if (!this.hasRegisterTemplate) {
-      register({
-        shape: 'custom-angular-template-node',
-        width: 120,
-        height: 20,
-        content: this.template,
-        injector: this.injector,
-      });
-      this.hasRegisterTemplate = true;
-    }
     const randomX = random(0, 1000);
     const randomY = random(0, 600);
     this.graph.addNode({
@@ -79,6 +60,11 @@ export class X6Component implements AfterViewInit {
     });
   }
 
+  addBatchComponent(count: number): void {
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
+    this.graph.addNodes(configList);
+  }
+
   private getBaiscNode(): Node.Metadata {
     const randomX = random(0, 1000);
     const randomY = random(0, 600);
@@ -96,19 +82,6 @@ export class X6Component implements AfterViewInit {
     return config;
   }
 
-  private doRegisterComponent(): void {
-    if (!this.hasRegisterComponent) {
-      register({
-        shape: 'custom-angular-component-node',
-        width: 120,
-        height: 20,
-        content: NodeComponent,
-        injector: this.injector,
-      });
-      this.hasRegisterComponent = true;
-    }
-  }
-
   constructor(private injector: Injector) {}
 
   ngAfterViewInit(): void {
@@ -119,6 +92,20 @@ export class X6Component implements AfterViewInit {
       background: {
         color: '#F2F7FA',
       },
+    });
+    register({
+      shape: 'custom-angular-component-node',
+      width: 120,
+      height: 20,
+      content: NodeComponent,
+      injector: this.injector,
+    });
+    register({
+      shape: 'custom-angular-template-node',
+      width: 120,
+      height: 20,
+      content: this.template,
+      injector: this.injector,
     });
   }
 }
