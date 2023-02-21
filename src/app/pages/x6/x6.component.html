@@ -16,22 +16,39 @@
       <td>
         <input type="text" #id placeholder="查找的节点序号">
         <input type="text" #text placeholder="替换的新内容">
-        <br>
         <button type="button" (click)="updateComponentValue(id.value, text.value)">更新组件Input值</button>
       </td>
     </tr>
     <tr>
-      <td>性能测试</td>
+      <td>性能测试(Angular Component)</td>
       <td>
         <button type="button" (click)="addBatchComponent(10)">添加10个组件</button>
         <button type="button" (click)="addBatchComponent(30)">添加30个组件</button>
         <button type="button" (click)="addBatchComponent(50)">添加50个组件</button>
       </td>
     </tr>
+    <tr>
+      <td>性能测试(Angular Template)</td>
+      <td>
+        <button type="button" (click)="addBatchTemplate(10)">添加10个组件</button>
+        <button type="button" (click)="addBatchTemplate(30)">添加30个组件</button>
+        <button type="button" (click)="addBatchTemplate(50)">添加50个组件</button>
+      </td>
+    </tr>
+    <tr>
+      <td>性能测试(HTML)</td>
+      <td>
+        <button type="button" (click)="addBatchHTML(10)">添加10个组件</button>
+        <button type="button" (click)="addBatchHTML(30)">添加30个组件</button>
+        <button type="button" (click)="addBatchHTML(50)">添加50个组件</button>
+      </td>
+    </tr>
   </table>
 </section>
 
-<div id="container" #container></div>
+<div class="graph-container">
+  <div id="container" #container></div>
+</div>
 
 <ng-template #template let-data="ngArguments">
   <section class="template-container">

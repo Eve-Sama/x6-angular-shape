@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { Graph, Node } from '@antv/x6';
+import { Graph, Node, Shape } from '@antv/x6';
 import { random } from 'lodash-es';
 import { NodeComponent } from '../../node-component/node.component';
 import { register } from '../../x6-angular-shape/src';
@@ -17,27 +17,13 @@ export class X6Component implements AfterViewInit {
   @ViewChild('template') template: TemplateRef<{}>;
 
   addComponent(): void {
-    const config = this.getBaiscNode();
-    this.graph.addNode({
-      ...config,
-      shape: 'custom-angular-component-node',
-    });
+    const config = this.getBaiscNode('custom-angular-component-node');
+    this.graph.addNode(config);
   }
 
   addTemplate(): void {
-    const randomX = random(0, 1000);
-    const randomY = random(0, 600);
-    this.graph.addNode({
-      id: `${++this.idCount}`,
-      shape: 'custom-angular-template-node',
-      x: randomX,
-      y: randomY,
-      data: {
-        ngArguments: {
-          value: `${this.idCount}`,
-        },
-      },
-    });
+    const config = this.getBaiscNode('custom-angular-template-node');
+    this.graph.addNode(config);
   }
 
   updateComponentValue(id: string, text: string): void {
@@ -61,18 +47,28 @@ export class X6Component implements AfterViewInit {
   }
 
   addBatchComponent(count: number): void {
-    const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-angular-component-node'));
     this.graph.addNodes(configList);
   }
 
-  private getBaiscNode(): Node.Metadata {
+  addBatchTemplate(count: number): void {
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-angular-template-node'));
+    this.graph.addNodes(configList);
+  }
+
+  addBatchHTML(count: number): void {
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-html'));
+    this.graph.addNodes(configList);
+  }
+
+  private getBaiscNode(shape: string): Node.Metadata {
     const randomX = random(0, 1000);
     const randomY = random(0, 600);
     const config: Node.Metadata = {
       id: `${++this.idCount}`,
-      shape: 'custom-angular-component-node',
       x: randomX,
       y: randomY,
+      shape,
       data: {
         ngArguments: {
           value: `${this.idCount}`,
@@ -106,6 +102,26 @@ export class X6Component implements AfterViewInit {
       height: 20,
       content: this.template,
       injector: this.injector,
+    });
+    Shape.HTML.register({
+      shape: 'custom-html',
+      width: 120,
+      height: 20,
+      effect: ['data'],
+      html(cell) {
+        const { ngArguments } = cell.getData();
+        const section = document.createElement('section');
+        section.style.display = 'flex';
+        section.style.justifyContent = 'center';
+        section.style.alignItems = 'center';
+        section.style.border = '2px solid #000';
+        section.style.width = '100%';
+        section.style.height = '100%';
+        section.innerHTML = `
+          HTML: <span style="color: gray;">${ngArguments.value}</span>
+        `;
+        return section;
+      },
     });
   }
 }

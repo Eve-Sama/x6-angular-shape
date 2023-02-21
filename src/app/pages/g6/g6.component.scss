@@ -1,4 +1,6 @@
 .header {
+  display: flex;
+  justify-content: center;
   table {
     border: 1px solid #000;
     td,
@@ -15,6 +17,16 @@
   }
 }
 
+.graph-container {
+  display: flex;
+  justify-content: center;
+  #container {
+    background-color: #F2F7FA;
+    width: 1000px;
+    height: 600px;
+  }
+}
+
 .template-container {
   display: flex;
   justify-content: center;
@@ -26,10 +38,4 @@
   .value {
     color: gray;
   }
-}
-
-#container {
-  background-color: #F2F7FA;
-  width: 1000px;
-  height: 600px;
 }

@@ -1,4 +1,6 @@
 .header {
+  display: flex;
+  justify-content: center;
   table {
     border: 1px solid #000;
     td,
@@ -13,6 +15,11 @@
       }
     }
   }
+}
+
+.graph-container {
+  display: flex;
+  justify-content: center;
 }
 
 .template-container {
