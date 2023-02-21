@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import G6, { Graph, GraphData, NodeConfig, TreeGraphData } from '@antv/g6';
 import { random } from 'lodash-es';
 
@@ -42,17 +42,22 @@ export class G6Component implements AfterViewInit {
       label: `${this.idCount}`,
       x: randomX,
       y: randomY,
+      description: 'ant_type_name_...',
+      color: '#2196f3',
+      meta: {
+        creatorName: 'a_creator',
+      },
+      type: 'rect-jsx',
     };
     return config;
   }
-
-  constructor(private injector: Injector) {}
 
   ngAfterViewInit(): void {
     this.graph = new G6.Graph({
       container: this.container.nativeElement,
       width: 1000,
       height: 600,
+      renderer: 'svg',
       modes: {
         default: ['drag-canvas', 'drag-node'],
       },
@@ -64,6 +69,47 @@ export class G6Component implements AfterViewInit {
         },
       },
     });
-    console.log(this.injector);
+    G6.registerNode(
+      'rect-jsx',
+      (cfg) => `
+        <group>
+          <rect>
+            <rect style={{
+              width: 150,
+              height: 20,
+              fill: ${cfg.color},
+              radius: [6, 6, 0, 0],
+              cursor: 'move'，
+              stroke: ${cfg.color}
+            }} draggable="true">
+              <text style={{
+                marginTop: 2,
+                marginLeft: 75,
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fill: '#fff' }}>{{label}}</text>
+            </rect>
+            <rect style={{
+              width: 150,
+              height: 55,
+              stroke: ${cfg.color},
+              fill: #ffffff,
+              radius: [0, 0, 6, 6],
+            }}>
+              <text style={{ marginTop: 5, marginLeft: 3, fill: '#333', marginLeft: 4 }}>描述: {{description}}</text>
+              <text style={{ marginTop: 10, marginLeft: 3, fill: '#333', marginLeft: 4 }}>创建者: {{meta.creatorName}}</text>
+            </rect>
+          </rect>
+          <circle style={{
+            stroke: ${cfg.color},
+            r: 10,
+            fill: '#fff',
+            marginLeft: 75,
+            cursor: 'pointer'
+          }} name="circle">
+            <image style={{ img: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png', width: 12, height: 12,  marginLeft: 70,  marginTop: -5 }} />
+          </circle>
+        </group>`,
+    );
   }
 }
