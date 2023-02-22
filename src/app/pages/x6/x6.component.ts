@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Injector, TemplateRef, ViewChild } from '@angular/core';
-import { Graph, Node, Shape } from '@antv/x6';
+import { Cell, Graph, Node, Shape } from '@antv/x6';
 import { random } from 'lodash-es';
 import { NodeComponent } from '../../node-component/node.component';
 import { register } from '../../x6-angular-shape/src';
+import { shapeNameMap, ShapeNmae, ShapeType } from './type';
 
 @Component({
   selector: 'app-x6',
@@ -13,20 +14,45 @@ export class X6Component implements AfterViewInit {
   private graph: Graph;
   private idCount = 0;
 
+  nodeCountMap = new Map<ShapeType, number>([
+    ['component', 0],
+    ['template', 0],
+    ['html', 0],
+  ]);
+
   @ViewChild('container') container: ElementRef;
   @ViewChild('template') template: TemplateRef<{}>;
 
-  addComponent(): void {
-    const config = this.getBaiscNode('custom-angular-component-node');
+  addNode(shapeType: ShapeType): void {
+    const config = this.getBaiscNode(shapeNameMap.get(shapeType)!);
     this.graph.addNode(config);
+    this.addNodeCount(shapeType);
   }
 
-  addTemplate(): void {
-    const config = this.getBaiscNode('custom-angular-template-node');
-    this.graph.addNode(config);
+  addBatchNode(count: number, shapeType: ShapeType): void {
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode(shapeNameMap.get(shapeType)!));
+    this.graph.addNodes(configList);
+    this.addNodeCount(shapeType, configList.length);
   }
 
-  updateComponentValue(id: string, text: string): void {
+  removeBatchNode(count: number, shapeType: ShapeType): void {
+    const cellList = this.graph.getCells();
+    const lastCountCellList: Cell<Cell.Properties>[] = [];
+    for (let index = 0; index < cellList.length; index++) {
+      const cell = cellList[index];
+      if (cell.shape === shapeNameMap.get(shapeType)) {
+        lastCountCellList.push(cell);
+      }
+      if (lastCountCellList.length === count) {
+        break;
+      }
+    }
+    this.graph.removeCells(lastCountCellList);
+    this.idCount -= lastCountCellList.length;
+    this.addNodeCount(shapeType, -lastCountCellList.length);
+  }
+
+  updateNodeValue(id: string, text: string): void {
     if (!id) {
       alert('请输入需要查找的节点id!');
       return;
@@ -46,22 +72,7 @@ export class X6Component implements AfterViewInit {
     });
   }
 
-  addBatchComponent(count: number): void {
-    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-angular-component-node'));
-    this.graph.addNodes(configList);
-  }
-
-  addBatchTemplate(count: number): void {
-    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-angular-template-node'));
-    this.graph.addNodes(configList);
-  }
-
-  addBatchHTML(count: number): void {
-    const configList = new Array(count).fill(null).map(() => this.getBaiscNode('custom-html'));
-    this.graph.addNodes(configList);
-  }
-
-  private getBaiscNode(shape: string): Node.Metadata {
+  private getBaiscNode(shape: ShapeNmae): Node.Metadata {
     const randomX = random(0, 1000);
     const randomY = random(0, 600);
     const config: Node.Metadata = {
@@ -78,6 +89,11 @@ export class X6Component implements AfterViewInit {
     return config;
   }
 
+  private addNodeCount(shapeType: ShapeType, count: number = 1): void {
+    const tempCount = this.nodeCountMap.get(shapeType)!;
+    this.nodeCountMap.set(shapeType, tempCount + count);
+  }
+
   constructor(private injector: Injector) {}
 
   ngAfterViewInit(): void {
@@ -90,21 +106,21 @@ export class X6Component implements AfterViewInit {
       },
     });
     register({
-      shape: 'custom-angular-component-node',
+      shape: shapeNameMap.get('component')!,
       width: 120,
       height: 20,
       content: NodeComponent,
       injector: this.injector,
     });
     register({
-      shape: 'custom-angular-template-node',
+      shape: shapeNameMap.get('template')!,
       width: 120,
       height: 20,
       content: this.template,
       injector: this.injector,
     });
     Shape.HTML.register({
-      shape: 'custom-html',
+      shape: shapeNameMap.get('html')!,
       width: 120,
       height: 20,
       effect: ['data'],
