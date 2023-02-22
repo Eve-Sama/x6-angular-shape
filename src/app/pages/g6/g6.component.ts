@@ -12,19 +12,33 @@ export class G6Component implements AfterViewInit {
   private data: GraphData | TreeGraphData = {
     nodes: [],
   };
-  private idCount = 0;
+
+  idCount = 0;
 
   @ViewChild('container') container: ElementRef;
 
   addNode(): void {
     const config = this.getBaiscNode();
-    (this.data.nodes as NodeConfig[]).push(config)
+    (this.data.nodes as NodeConfig[]).push(config);
     this.render();
   }
 
-  addBatchComponent(count: number): void {
+  addBatch(count: number): void {
     const configList = new Array(count).fill(null).map(() => this.getBaiscNode());
-    (this.data.nodes as NodeConfig[]).push(...configList)
+    (this.data.nodes as NodeConfig[]).push(...configList);
+    this.render();
+  }
+
+  removeBatch(count: number): void {
+    const nodes = this.data.nodes as NodeConfig[];
+    if (nodes.length === 0) {
+      return;
+    }
+    new Array(count).fill(null).forEach(() => (this.data.nodes as NodeConfig[]).pop());
+    this.idCount -= count;
+    if (this.idCount < 0) {
+      this.idCount = 0;
+    }
     this.render();
   }
 
@@ -71,11 +85,11 @@ export class G6Component implements AfterViewInit {
     });
     G6.registerNode(
       'rect-jsx',
-      (cfg) => `
+      cfg => `
         <group>
           <rect>
             <rect style={{
-              width: 150,
+              width: 120,
               height: 20,
               fill: ${cfg.color},
               radius: [6, 6, 0, 0],
@@ -84,31 +98,21 @@ export class G6Component implements AfterViewInit {
             }} draggable="true">
               <text style={{
                 marginTop: 2,
-                marginLeft: 75,
+                marginLeft: 58,
                 textAlign: 'center',
                 fontWeight: 'bold',
                 fill: '#fff' }}>{{label}}</text>
             </rect>
             <rect style={{
-              width: 150,
-              height: 55,
+              width: 120,
+              height: 20,
               stroke: ${cfg.color},
               fill: #ffffff,
               radius: [0, 0, 6, 6],
             }}>
-              <text style={{ marginTop: 5, marginLeft: 3, fill: '#333', marginLeft: 4 }}>描述: {{description}}</text>
-              <text style={{ marginTop: 10, marginLeft: 3, fill: '#333', marginLeft: 4 }}>创建者: {{meta.creatorName}}</text>
+              <text style={{ marginTop: 5, fill: '#333', marginLeft: 38 }}>性能测试</text>
             </rect>
           </rect>
-          <circle style={{
-            stroke: ${cfg.color},
-            r: 10,
-            fill: '#fff',
-            marginLeft: 75,
-            cursor: 'pointer'
-          }} name="circle">
-            <image style={{ img: 'https://gw.alipayobjects.com/zos/antfincdn/FLrTNDvlna/antv.png', width: 12, height: 12,  marginLeft: 70,  marginTop: -5 }} />
-          </circle>
         </group>`,
     );
   }

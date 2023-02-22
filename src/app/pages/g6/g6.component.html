@@ -7,15 +7,15 @@
     <tr>
       <td>增加节点</td>
       <td>
-        <button type="button" (click)="addNode()">增加节点</button>
+        <button type="button" (click)="addNode()">增加 HTML 节点</button>
       </td>
     </tr>
     <tr>
-      <td>性能测试(HTML)</td>
+      <td>批量操作(HTML)</td>
       <td>
-        <button type="button" (click)="addBatchComponent(10)">增加10个组件</button>
-        <button type="button" (click)="addBatchComponent(30)">增加30个组件</button>
-        <button type="button" (click)="addBatchComponent(50)">增加50个组件</button>
+        <button type="button" (click)="addBatch(50)">增加50个节点</button>
+        <button type="button" (click)="removeBatch(50)">减少50个节点</button>
+        <span class="count">节点总数: {{ idCount }}</span>
       </td>
     </tr>
   </table>
