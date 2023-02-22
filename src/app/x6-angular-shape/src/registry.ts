@@ -24,8 +24,6 @@ export function register(config: AngularShapeConfig) {
   Graph.registerNode(
     shape,
     {
-      injector,
-      content,
       inherit: 'angular-shape',
       ...others,
     },
