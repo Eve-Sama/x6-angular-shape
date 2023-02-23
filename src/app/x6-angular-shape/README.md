@@ -109,7 +109,7 @@ node.setData({
 
 ## 有 demo 吗?
 
-有的, 因为X6渲染节点部分与框架是解耦的. 因此 `x6-angular-shape` 包并非是直接在源代码里改的, 而是在一个单独的Angular环境中开发的. 详情请参考[Eve-Sama/x6-angular-shape](https://github.com/Eve-Sama/x6-angular-shape)
+有的, 因为X6渲染节点部分与框架是解耦的. 因此 `x6-angular-shape` 包并非是直接在源代码里改的, 而是在一个单独的Angular环境中开发的. 该 demo 还提供了多种节点类型的性能测试, 详情请参考[Eve-Sama/x6-angular-shape](https://github.com/Eve-Sama/x6-angular-shape)、[X6与G6的性能对比, 以及X6多节点类型下的FPS临界点讨论](https://github.com/antvis/X6/issues/3266)
 
 ## FAQ
 
@@ -125,11 +125,11 @@ node.setData({
 
 #### demo更聚焦
 
-1.x版本的 demo 除了渲染组件外, 还写了连线、清除等一系列案例. 看似扩展, 实则眼花缭乱. 作为 `x6-angular-shape`的 demo, 2.x版本更加聚焦, 只提供了注册、渲染、更新等, 与插件无关的内容请查看X6官网.
+1.x版本的 demo 除了渲染组件外, 还写了连线、清除等一系列案例. 看似扩展, 实则眼花缭乱. 作为 `x6-angular-shape`的 demo, 2.x版本更加聚焦, 更加聚焦于shape的使用与性能测试等, 与插件无关的内容请查看X6官网.
 
 #### 功能更稳定
 
-在1.x版本中, 虽然实现了功能, 但是缺少深度、长远的思考, 所以存在部分场景没有考虑到的情况. 比如`ngArguments`的变化, 对 `TemplateRef`的场景并不生效. 虽然对`Component`生效但是无法触发`ngOnChanges`. 而在新版本中, 这些问题都将不复存在.
+在1.x版本中, 虽然实现了功能, 但是使用场景的思考不够全面. 比如`ngArguments`的变化, 对 `TemplateRef`的场景并不生效. 虽然对`Component`生效但是无法触发`ngOnChanges`. 而在新版本中, 这些问题都将不复存在.
 
 ### 版本要求
 
