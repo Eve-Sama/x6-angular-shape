@@ -30,7 +30,7 @@ export class X6Component implements AfterViewInit {
   }
 
   addBatchNode(count: number, shapeType: ShapeType): void {
-    const configList = new Array(count).fill(this.getBaiscNode(shapeNameMap.get(shapeType)!));
+    const configList = new Array(count).fill(null).map(() => this.getBaiscNode(shapeNameMap.get(shapeType)!));
     this.graph.addNodes(configList);
     this.addNodeCount(shapeType, configList.length);
   }
