@@ -48,8 +48,9 @@ export class AngularShapeView extends NodeView<AngularShape> {
         const componentRef = viewContainerRef.createComponent(content);
         const insertNode = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
         container.appendChild(insertNode);
-        this.setInstanceInput(content, componentRef)
+        this.setInstanceInput(content, componentRef);
         node.on('change:data', () => this.setInstanceInput(content, componentRef));
+        node.on('removed', () => componentRef.destroy());
       }
     }
   }
