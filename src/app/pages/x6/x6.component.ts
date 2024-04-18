@@ -4,11 +4,18 @@ import { random } from 'lodash-es';
 import { NodeComponent } from '../../node-component/node.component';
 import { register } from '../../x6-angular-shape/src';
 import { shapeNameMap, ShapeNmae, ShapeType } from './type';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-x6',
   templateUrl: './x6.component.html',
   styleUrls: ['./x6.component.scss'],
+  providers: [
+    {
+      provide: '#TOKEN',
+      useValue: new BehaviorSubject('Default'),
+    },
+  ],
 })
 export class X6Component implements AfterViewInit {
   private graph: Graph;
@@ -70,6 +77,11 @@ export class X6Component implements AfterViewInit {
         value: text,
       },
     });
+  }
+
+  updateInjectValue(value: string) {
+    const injector = this.injector.get('#TOKEN');
+    injector.next(value);
   }
 
   private getBaiscNode(shape: ShapeNmae): Node.Metadata {

@@ -17,6 +17,7 @@
       <td>
         <input type="text" #id placeholder="查找的节点序号">
         <input type="text" #text placeholder="替换的新内容">
+        <button type="button" (click)="updateInjectValue(text.value)">更新注入值</button>
         <button type="button" (click)="updateNodeValue(id.value, text.value)">更新组件Input值</button>
       </td>
     </tr>
